@@ -1,0 +1,31 @@
+name: "textline_ori"
+backend: "onnxruntime"
+max_batch_size: 16
+
+input [
+  {
+    name: "x"
+    data_type: TYPE_FP32
+    dims: [ 3, 80, 160 ]
+  }
+]
+
+output [
+  {
+    name: "fetch_name_0"
+    data_type: TYPE_FP32
+    dims: [ 2 ]
+  }
+]
+
+dynamic_batching {
+  preferred_batch_size: [ 4, 8, 16 ]
+  max_queue_delay_microseconds: 100
+}
+
+instance_group [
+  {
+    count: 1
+    kind: KIND_CPU
+  }
+]

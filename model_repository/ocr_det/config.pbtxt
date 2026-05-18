@@ -1,0 +1,31 @@
+name: "ocr_det"
+backend: "onnxruntime"
+max_batch_size: 8
+
+input [
+  {
+    name: "x"
+    data_type: TYPE_FP32
+    dims: [ 3, -1, -1 ]
+  }
+]
+
+output [
+  {
+    name: "fetch_name_0"
+    data_type: TYPE_FP32
+    dims: [ 1, -1, -1 ]
+  }
+]
+
+dynamic_batching {
+  preferred_batch_size: [ 1, 4 ]
+  max_queue_delay_microseconds: 100
+}
+
+instance_group [
+  {
+    count: 1
+    kind: KIND_CPU
+  }
+]

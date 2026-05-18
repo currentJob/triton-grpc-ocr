@@ -1,0 +1,41 @@
+services:
+  triton:
+    image: nvcr.io/nvidia/tritonserver:24.01-py3
+    ports:
+      - "8000:8000"   # HTTP REST
+      - "8001:8001"   # gRPC
+      - "8002:8002"   # Prometheus metrics
+    volumes:
+      - ./model_repository:/models
+    command: >
+      tritonserver
+      --model-repository=/models
+      --log-verbose=1
+      --strict-model-config=false
+      --exit-on-error=false
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/v2/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # GPU 사용 시 아래 주석 해제
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  inference-gateway:
+    build: .
+    ports:
+      - "50055:50055"   # 추론 게이트웨이 gRPC
+    environment:
+      - TRITON_HOST=triton
+      - TRITON_PORT=8001
+      - GATEWAY_PORT=50055
+    depends_on:
+      triton:
+        condition: service_healthy
+    command: python main.py --service inference --triton-host triton --triton-port 8001

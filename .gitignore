@@ -1,0 +1,53 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[oc]
+*.pyd
+build/
+dist/
+wheels/
+*.egg-info/
+.eggs/
+
+# ── Virtual environments ──────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── Node / Frontend ───────────────────────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ── Model weights (대용량 바이너리 — Git LFS 또는 별도 스토리지 사용) ─────────
+model_repository/**/*.onnx
+model_repository/**/*.pt
+model_repository/**/*.bin
+model_repository/**/*.engine
+model_repository/**/*.plan
+
+# ── 런타임 데이터 ─────────────────────────────────────────────────────────────
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# ── 임시 업로드 / 테스트 이미지 ──────────────────────────────────────────────
+tmp/
+temp/
+*.tmp
+132620.png
+
+# ── 환경 변수 / 시크릿 ────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── IDE / OS ──────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── uv lock (선택: 재현성 필요시 커밋, 아니면 제외) ──────────────────────────
+# uv.lock

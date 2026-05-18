@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package triton_gateway;
+
+service InferenceService {
+  // 단일 추론 요청
+  rpc Infer (InferRequest) returns (InferResponse);
+  // 양방향 스트리밍 추론 (배치/연속 처리)
+  rpc InferStream (stream InferRequest) returns (stream InferResponse);
+  // Triton 서버 상태 확인
+  rpc ServerHealth (HealthRequest) returns (HealthResponse);
+  // 특정 모델 준비 상태 확인
+  rpc ModelReady (ModelReadyRequest) returns (ModelReadyResponse);
+}
+
+message InferRequest {
+  string model_name = 1;
+  string model_version = 2;   // 비어있으면 최신 버전 사용
+  repeated InferInputTensor inputs = 3;
+  repeated InferRequestedOutputTensor outputs = 4;
+}
+
+message InferInputTensor {
+  string name = 1;
+  string datatype = 2;        // FP32, INT32, UINT8, BYTES 등
+  repeated int64 shape = 3;
+  bytes raw_data = 4;
+}
+
+message InferRequestedOutputTensor {
+  string name = 1;
+}
+
+message InferResponse {
+  string model_name = 1;
+  string model_version = 2;
+  repeated InferOutputTensor outputs = 3;
+  string error = 4;           // 오류 발생 시 메시지
+}
+
+message InferOutputTensor {
+  string name = 1;
+  string datatype = 2;
+  repeated int64 shape = 3;
+  bytes raw_data = 4;
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+  bool live = 1;
+  bool ready = 2;
+}
+
+message ModelReadyRequest {
+  string model_name = 1;
+  string model_version = 2;
+}
+
+message ModelReadyResponse {
+  string model_name = 1;
+  bool ready = 2;
+}

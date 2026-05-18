@@ -1,0 +1,16 @@
+[project]
+name = "grpc-demo-page"
+version = "0.1.0"
+description = "gRPC demo with Python"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "grpcio>=1.68.1",
+    "grpcio-tools>=1.68.1",
+    "tritonclient[grpc]>=2.40.0",
+    "numpy>=1.26.0",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.29.0",
+    "python-multipart>=0.0.9",
+    "pillow>=10.0.0",
+]
